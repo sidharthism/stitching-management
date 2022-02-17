@@ -46,8 +46,3 @@ def home(request):
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "shop/dashboard.html", {})
-
-
-# class HomeView(TemplateView):
-#     def get(self, request, *args, **kwargs):
-#         render('shop/index.html', "")
