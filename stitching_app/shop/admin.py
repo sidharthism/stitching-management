@@ -8,7 +8,7 @@ from shop.models import User
 from shop.forms import ShopUserCreationForm, ShopUserChangeForm
 
 
-class ShopUserAdmin(UserAdmin):
+class ShopUserAdmin(admin.ModelAdmin):
     model = User
     add_form = ShopUserCreationForm
     form = ShopUserChangeForm
