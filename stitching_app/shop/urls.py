@@ -5,5 +5,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("login/", ShopLoginView.as_view(), name="login"),
     path("logout/", ShopLogoutView.as_view(next_page='login'), name="logout"),
-    path("register/", ShopRegisterView.as_view(), name="register")
+    path("register/", ShopRegisterView.as_view(), name="register"),
+    path("admin/shop/user/add/", ShopRegisterView.as_view(),
+         name="register_via_admin")
 ]

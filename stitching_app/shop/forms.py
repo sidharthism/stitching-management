@@ -1,11 +1,14 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 # from django.contrib.auth.forms import ReadOnlyPasswordHashField
 # from django.forms import ModelForm, CharField, PasswordInput
+from django.forms import CharField, TextInput
 # from django.core.exceptions import ValidationError
 from shop.models import User
 
 
 class ShopUserCreationForm(UserCreationForm):
+    # phone_no = CharField(
+    #     widget=TextInput(attrs={'type': 'number'}))
 
     class Meta(UserCreationForm.Meta):
         model = User

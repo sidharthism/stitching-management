@@ -12,8 +12,8 @@
 
 @font-face {
   font-family: "Sign";
-  src: url("../src/font/SCRIPTIN.ttf"); /* IE9 Compat Modes */
-  src: url("../src/font/SCRIPTIN.ttf") format("truetype");
+  src: url("../fonts/SCRIPTIN.ttf"); /* IE9 Compat Modes */
+  src: url("../fonts/SCRIPTIN.ttf") format("truetype");
 }
 
 * {

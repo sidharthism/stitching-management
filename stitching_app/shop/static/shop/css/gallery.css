@@ -42,42 +42,39 @@
   transition: all 0.3s;
 }
 
-@media(min-width: 500px){
-  .gallery-section .gallery .box:hover{
+@media (min-width: 500px) {
+  .gallery-section .gallery .box:hover {
     transform: scale(1.08);
   }
-  .gallery-section .gallery .box1{
-    background-image: url("../src/img/flower.jpg");
+  .gallery-section .gallery .box1 {
+    background-image: url("../img/flower.jpg");
     grid-row: span 2;
   }
-  .gallery-section .gallery .box2{
-    background-image: url("../src/img/wedding_lady.jpg");
+  .gallery-section .gallery .box2 {
+    background-image: url("../img/wedding_lady.jpg");
   }
-  .gallery-section .gallery .box3{
-    background-image: url("../src/img/shirt.jpg");
+  .gallery-section .gallery .box3 {
+    background-image: url("../img/shirt.jpg");
     grid-column: span 2;
   }
-  .gallery-section .gallery .box4{
-    background-image: url("../src/img/pant.jpg");
+  .gallery-section .gallery .box4 {
+    background-image: url("../img/pant.jpg");
   }
-  .gallery-section .gallery .box5{
-    background-image: url("../src/img/green_salwar.jpg");
+  .gallery-section .gallery .box5 {
+    background-image: url("../img/green_salwar.jpg");
   }
-  .gallery-section .gallery .box6{
-    background-image: url("../src/img/gown.jpg");
+  .gallery-section .gallery .box6 {
+    background-image: url("../img/gown.jpg");
     grid-row: span 2;
   }
-  .gallery-section .gallery .box7{
-    background-image: url("../src/img/saree.jpg");
+  .gallery-section .gallery .box7 {
+    background-image: url("../img/saree.jpg");
     grid-column: span 2;
   }
-  .gallery-section .gallery .box8{
-    background-image: url("../src/img/suit.jpg");
+  .gallery-section .gallery .box8 {
+    background-image: url("../img/suit.jpg");
   }
-
 }
-
-
 
 @media (max-width: 500px) {
   .gallery-section {
@@ -102,34 +99,34 @@
     width: 320px;
     height: 350px;
   }
-  .gallery-section .gallery .box1{
-    background-image: url("../src/img/gown.jpg");
+  .gallery-section .gallery .box1 {
+    background-image: url("../img/gown.jpg");
     grid-row: span 2;
   }
-  .gallery-section .gallery .box2{
-    background-image: url("../src/img/flower.jpg");
+  .gallery-section .gallery .box2 {
+    background-image: url("../img/flower.jpg");
     grid-column: span 2;
     background-position-y: 70%;
   }
-  .gallery-section .gallery .box3{
-    background-image: url("../src/img/suit.jpg");
+  .gallery-section .gallery .box3 {
+    background-image: url("../img/suit.jpg");
   }
-  .gallery-section .gallery .box4{
-    background-image: url("../src/img/green_salwar.jpg");
+  .gallery-section .gallery .box4 {
+    background-image: url("../img/green_salwar.jpg");
     grid-row: span 2;
   }
-  .gallery-section .gallery .box5{
-    background-image: url("../src/img/wedding_lady.jpg");
+  .gallery-section .gallery .box5 {
+    background-image: url("../img/wedding_lady.jpg");
     grid-row: span 2;
   }
-  .gallery-section .gallery .box6{
-    background-image: url("../src/img/pant.jpg");
+  .gallery-section .gallery .box6 {
+    background-image: url("../img/pant.jpg");
   }
-  .gallery-section .gallery .box7{
-    background-image: url("../src/img/saree.jpg");
+  .gallery-section .gallery .box7 {
+    background-image: url("../img/saree.jpg");
     grid-column: span 2;
   }
-  .gallery-section .gallery .box8{
+  .gallery-section .gallery .box8 {
     display: none;
   }
 }

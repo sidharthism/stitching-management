@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
+from django.core.validators import RegexValidator
 
 # Create your models here.
 
@@ -52,13 +53,18 @@ class ShopUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(max_length=50, null=False)
+    name = models.CharField(verbose_name="Full name",
+                            max_length=50, null=False)
     email = models.EmailField(
         verbose_name='Email',
         max_length=255,
         unique=True,
     )
+    phone_no_regex = RegexValidator(
+        regex=r'^[0-9]{10}$', message="Enter a valid phone number")
     phone_no = models.CharField(
+        validators=[phone_no_regex],
+        verbose_name='Phone no (+91)',
         max_length=10, null=False, unique=True)
     address = models.TextField(max_length=300, null=False)
     # is_admin = models.BooleanField(default=False)

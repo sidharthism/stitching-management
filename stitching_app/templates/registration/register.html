@@ -4,14 +4,18 @@
 {% block content %}
 <body class="auth">
 {% if form.errors %}
-  <p>{{form.errors}}</p>
+<div class="errors">
+  {% comment %} <p>{{form.errors.}}</p> {% endcomment %}
   <p>Enter the required fields correctly.</p>
+</div>
 {% endif %}
+<h1 class="form-title">Welcome to Timoraah</h1>
 <div class="form-container">
     <form class = "form register-form" method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn spcl-btn">Register</button>
+        <p class="form-link"><a href="{% url 'login' %}">Already registered? Login here!</a></p>
     </form>
 </div>
 </body>

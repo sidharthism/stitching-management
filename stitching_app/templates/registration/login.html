@@ -3,15 +3,20 @@
 <link rel="stylesheet" type="text/css" href="{% static 'shop/css/style.css' %}">
 {% block content %}
 <body class="auth">
-{% if form.errors %}
-  <p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-<div class="form-container">
-<form class="form" method="post" action="{% url 'login' %}">
+  {% if form.errors %}
+  <div class="errors">
+    <p>Invalid login credentials. Please try again.</p>
+  </div>
+  {% endif %}
+  <h1 class="form-title">Welcome Back</h1>
+  <div class="form-container">
+    
+<form class="form login-form" method="post" action="{% url 'login' %}">
 {% csrf_token %}
 {{ form.as_p }}
 <button type="submit" class="btn">Login</button>
 <input type="hidden" name="next" value="{{ next }}" />
+<p class="form-link"><a href="{% url 'register' %}">New to Timoraah? Register here!</a></p>
 </form>
 </div>
 </body>
