@@ -20,16 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yu+7egqo-v36@-ge6q_op8c0q-13u0x@8n%3cj%5hlvg(ad^(c'
+SECRET_KEY = 'django-insecure-#9p_i-$*4t6r@#*9t_vkjg^fd-^($b8b-brjb2se(qup4r_0$t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'localhost']
 
-AUTHENTICATION_BACKENDS = (
-    ('django.contrib.auth.backends.ModelBackend'),
-)
 
 # Application definition
 
@@ -55,10 +52,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'stitching_app.urls'
 
+LOGIN_URL = 'login'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', ],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -70,14 +69,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# Static folder
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-# Media folder
-MEDIA_URL = 'media/'
 
 WSGI_APPLICATION = 'stitching_app.wsgi.application'
 
@@ -92,8 +83,8 @@ DATABASES = {
     }
 }
 
+# User Model
 AUTH_USER_MODEL = 'shop.User'
-LOGIN_URL = 'login'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

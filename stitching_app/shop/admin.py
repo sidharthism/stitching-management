@@ -1,32 +1,36 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext_lazy as _
+
 from shop.models import User
 from shop.forms import ShopUserCreationForm, ShopUserChangeForm
 
 
-class ShopUserAdmin(BaseUserAdmin):
+class ShopUserAdmin(UserAdmin):
+    model = User
     add_form = ShopUserCreationForm
     form = ShopUserChangeForm
 
-    list_display = ('email', 'is_admin')
-    list_filter = ('is_admin',)
+    list_display = ('email', 'is_staff', 'is_active',)
+    list_filter = ('is_staff', 'is_active',)
 
     fieldsets = (
-        (None, {'fields': ('email', 'phone_no', 'password')}),
-        (('Personal info'), {'fields': ('name', 'address')}),
-        (('Permissions'), {
-         'fields': ('is_active', 'groups', 'user_permissions')}),
-        (('Important dates'), {'fields': ('last_login', )}),
+        (None, {'fields': ('email', 'password', )}),
+        (_('Personal info'), {'fields': ('name', 'address', )}),
+        (_('Permissions'), {
+         'fields': ('is_active', 'is_staff', )}),
+        (_('Important dates'), {'fields': ('last_login', )}),
     )
     add_filedsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('name', 'email', 'phone_no', 'address', 'password', 'password2')}
-         ),
+            'fields': ('email', 'name', 'phone_no', 'address', 'is_staff', 'is_active', 'password', 'password2', ),
+        }
+        ),
     )
 
-    search_fields = ('name', 'email', )
+    search_fields = ('email', 'name', )
     ordering = ('email', )
 
     filter_horizontal = ()
@@ -34,5 +38,4 @@ class ShopUserAdmin(BaseUserAdmin):
 
 # Register your models here.
 admin.site.register(User, ShopUserAdmin)
-# admin.site.register(User)
 admin.site.unregister(Group)

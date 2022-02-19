@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Comforter&family=Poppins:wght@300;400;500;600;700&display=swap");
+
+@import "./section1.css";
+@import "./section2.css";
+@import "./section3.css";
+@import "./signup.css";
+@import "./gallery.css";
+@import "./review.css";
+@import "./footer.css";
+@import "./services.css";
+@import "./form.css";
+
+@font-face {
+  font-family: "Sign";
+  src: url("../src/font/SCRIPTIN.ttf"); /* IE9 Compat Modes */
+  src: url("../src/font/SCRIPTIN.ttf") format("truetype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: #222;
+}
+
+header {
+  font-family: "Sign", "Comforter", cursive;
+  background: #b39ddb;
+  padding: 0px 100px;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 500px) {
+  header {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 20px;
+  }
+}
+
+/* .auth {
+  background: #b39ddb;
+} */

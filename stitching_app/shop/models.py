@@ -1,54 +1,54 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
-
+from django.utils import timezone
 
 # Create your models here.
 
+
 class ShopUserManager(BaseUserManager):
-    def create_user(self, email, name, phone_no, address, password=None):
+    # class Meta:
+    #     model = User
+    def create_user(self, email, name, phone_no, address, password=None, **extra_fields):
+        """
+        Create and save a User with the given email and password.
+        """
         if not email:
             raise ValueError('Users must have an email address')
-        # if not (len(str(phone_no)) == 10):
-        #     raise ValueError('Enter a valid phone number')
-
-        user = self.model(
-            email=self.normalize_email(email),
-            name=name,
-            phone_no=phone_no,
-            address=address,
-        )
-
+        if not (len(str(phone_no)) == 10):
+            raise ValueError('Enter a valid phone number')
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name,
+                          phone_no=phone_no, address=address, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
 
-    # def create_staffuser(self, email, name, phone_no, address, password):
-    #     """
-    #     Creates and saves a staff user with the given email and password.
-    #     """
+    # def create_superuser(self, email, name, phone_no, address, password=None):
     #     user = self.create_user(
     #         email,
     #         password,
     #         name,
     #         phone_no,
-    #         address,
+    #         address
     #     )
-    #     user.staff = True
+    #     user.is_admin = True
     #     user.save(using=self._db)
     #     return user
 
-    def create_superuser(self, email, name, phone_no, address, password=None):
-        user = self.create_user(
-            email,
-            password,
-            name,
-            phone_no,
-            address
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
+    def create_superuser(self, email, name, phone_no, address, password=None, **extra_fields):
+        """
+        Create and save a SuperUser with the given email and password.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+        return self.create_user(email, name, phone_no, address, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -61,29 +61,31 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_no = models.CharField(
         max_length=10, null=False, unique=True)
     address = models.TextField(max_length=300, null=False)
+    # is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone_no', 'address']
 
     objects = ShopUserManager()
 
-    def has_perm(self, perm, obj=None):
-        "Does the user have a specific permission?"
-        # Simplest possible answer: Yes, always
-        return True
+    # def has_perm(self, perm, obj=None):
+    #     "Does the user have a specific permission?"
+    #     # Simplest possible answer: Yes, always
+    #     return True
 
-    def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
-        # Simplest possible answer: Yes, always
-        return True
+    # def has_module_perms(self, app_label):
+    #     "Does the user have permissions to view the app `app_label`?"
+    #     # Simplest possible answer: Yes, always
+    #     return True
 
-    @property
-    def is_staff(self,):
-        "Is the user a member of staff?"
-        # Simplest possible answer: All admins are staff
-        return self.is_admin
+    # @property
+    # def is_staff(self,):
+    #     "Is the user a member of staff?"
+    #     # Simplest possible answer: All admins are staff
+    #     return self.is_admin
 
     # @property
     # def is_superuser(self,):

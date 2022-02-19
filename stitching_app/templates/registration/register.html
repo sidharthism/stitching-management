@@ -1,12 +1,18 @@
+{% load static %}
+  {% comment %} <link rel="stylesheet" href="css/style.css"> {% endcomment %}
+<link rel="stylesheet" type="text/css" href="{% static 'shop/css/style.css' %}">
 {% block content %}
-
+<body class="auth">
 {% if form.errors %}
-  <p>{{form.errors}}</p><p>Enter the required fields correctly.</p>
+  <p>{{form.errors}}</p>
+  <p>Enter the required fields correctly.</p>
 {% endif %}
-
-<form method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" class="btn btn-primary" value="Register" />
-</form>
+<div class="form-container">
+    <form class = "form register-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn spcl-btn">Register</button>
+    </form>
+</div>
+</body>
 {% endblock %}

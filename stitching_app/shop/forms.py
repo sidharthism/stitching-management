@@ -1,8 +1,7 @@
-from django.contrib.auth.forms import UserCreationForm, ReadOnlyPasswordHashField
-from django.forms import ModelForm, CharField, PasswordInput
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
-from django.contrib.auth.models import Group
-from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+# from django.contrib.auth.forms import ReadOnlyPasswordHashField
+# from django.forms import ModelForm, CharField, PasswordInput
+# from django.core.exceptions import ValidationError
 from shop.models import User
 
 
@@ -10,7 +9,7 @@ class ShopUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('name', 'email', 'phone_no', 'address',)
+        fields = ('email', 'name', 'phone_no', 'address',)
 
 # class ShopUserCreationForm(ModelForm):
 #     """A form for creating new users. Includes all the required
@@ -40,20 +39,12 @@ class ShopUserCreationForm(UserCreationForm):
 #         return user
 
 
-class ShopUserChangeForm(ModelForm):
+class ShopUserChangeForm(UserChangeForm):
     """A form for updating users. Includes all the fields on
     the user, but replaces the password field with admin's
     password hash display field.
     """
-    password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = User
-        fields = ('name', 'email', 'phone_no', 'address',
-                  'password', 'is_active', 'is_admin')
-
-    def clean_password(self, ):
-        # Regardless of what the user provides, return the initial value.
-        # This is done here, rather than on the field, because the
-        # field does not have access to the initial value
-        return self.initial["password"]
+        fields = ('email', 'name',  'phone_no', 'address', )
