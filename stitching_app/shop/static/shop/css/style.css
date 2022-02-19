@@ -34,6 +34,25 @@ header {
   font-size: 1.5rem;
 }
 
+.auth header {
+  font-family: "Sign", "Comforter", cursive;
+  background: #ffffff !important;
+  padding: 0px 50px !important;
+  font-size: 1rem !important;
+}
+
+.auth header a {
+  text-decoration: none;
+}
+
+/* .auth header a:hover {
+  color: #222222;
+} */
+
+.auth header a:visited {
+  color: #222222;
+}
+
 @media (max-width: 500px) {
   header {
     text-align: center;
@@ -45,3 +64,34 @@ header {
 /* .auth {
   background: #b39ddb;
 } */
+
+.home-auth-links {
+  display: flex;
+  justify-content: space-between;
+}
+
+.home-auth-links .auth-links-container {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.home-auth-links .auth-links-container a {
+  text-decoration: none;
+  color: #222222;
+}
+
+.home-auth-links .auth-links-container a:hover {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.home-auth-links .auth-links-container a.login,
+.home-auth-links .auth-links-container a.register,
+.home-auth-links .auth-links-container a.logout,
+.home-auth-links .auth-links-container a.dashboard {
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}

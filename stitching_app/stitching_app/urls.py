@@ -17,6 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from shop.views import *
 
+admin.site.site_header = "Timoraah - Shop Management"
+admin.site.index_title = "Dashboard"
+admin.site.site_title = "Timoraah - Shop Management"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path("accounts/", include("django.contrib.auth.urls")),

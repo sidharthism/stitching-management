@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from shop.models import User
+from shop.models import *
 from shop.forms import ShopUserCreationForm, ShopUserChangeForm
 
 
@@ -40,3 +40,7 @@ class ShopUserAdmin(admin.ModelAdmin):
 # Register your models here.
 admin.site.register(User, ShopUserAdmin)
 admin.site.unregister(Group)
+admin.site.register(Item)
+admin.site.register(Material)
+admin.site.register(Color)
+admin.site.register(AvailableMaterial)
