@@ -5,10 +5,13 @@ from django.views import View
 # from django.views.generic.base import TemplateView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import FormView
-from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.template import RequestContext
 from shop.forms import *
+from shop.models import *
 # Create your views here.
 
 
@@ -37,9 +40,23 @@ class ShopRegisterView(FormView):
             login(self.request, user)
         return super(ShopRegisterView, self).form_valid(form)
 
+# @csrf_protect
 
+
+@csrf_exempt
 def home(request):
-    return render(request, "shop/index.html", {})
+    # csrfContext = RequestContext(request)
+    ctx = {"review_success": None}
+    if request.method == 'POST':
+        review = int(request.POST.get('review', 1))
+        comment = str(request.POST.get('comment', ""))
+        try:
+            r = Review(user_id=request.user, review=review, comment=comment)
+            r.save()
+            ctx["review_success"] = "Thank you for the review! Keep shopping!"
+        except Exception as e:
+            print(e)
+    return render(request, "shop/index.html", ctx)
 
 
 class DashboardView(LoginRequiredMixin, View):

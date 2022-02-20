@@ -51,7 +51,13 @@
         </p>
         <div class="btn-box">
           <div class="btn">Place an Order</div>
-          <div class="btn">Explore Prices</div>
+          <div class="btn">
+            <a
+              href="#pricing-section"
+              style="text-decoration: none; color: initial"
+              >Explore Prices</a
+            >
+          </div>
         </div>
       </div>
       <div class="right">
@@ -164,7 +170,7 @@
 
     <!--Services available-->
 
-    <div class="Services">
+    <div id="pricing-section" class="Services">
       <div class="mini-title">Uncomplicated Pricing</div>
       <h1 class="title">No hidden charges, no fuss.</h1>
       <div class="card-box">
@@ -489,16 +495,28 @@
 
     <!-- Review -->
     {% if request.user.is_authenticated %}
-    <div class="review-section">
+    <div id="review-section" class="review-section">
       <div class="mini-title">Open Up</div>
       <h1 class="title">Your Experience</h1>
-      <form>
-        <input id="cust_name" type="text" placeholder="Name" />
-        <input id="cust_star" type="text" placeholder="Rating (out of 5)" />
-        <input id="cust_time" type="text" placeholder="Time" />
-        <textarea id="cust_quote" placeholder="Message"></textarea>
-        <div class="btn" id="add_review">Add Review</div>
+      <form method="POST" action="/">
+        <input
+          id="cust_star"
+          name="review"
+          type="number"
+          placeholder="Rating (out of 5)"
+          min="1"
+          max="5"
+        />
+        <textarea
+          id="cust_quote"
+          name="comment"
+          placeholder="Message"
+        ></textarea>
+        <button type="submit" class="btn" id="add_review">Add Review</button>
       </form>
+      {% if review_success is not empty %}
+      <h3 class="review-success-message">{{ review_success }}</h3>
+      {% endif %}
     </div>
     {% endif %}
 

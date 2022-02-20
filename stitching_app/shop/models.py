@@ -1,9 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.db import models
+from django.db import IntegrityError, models
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator
-
+from django.contrib import admin
+from shop.utils import create_new_ref_number
 
 # Create your models here.
 
@@ -137,17 +138,126 @@ class AvailableMaterial(models.Model):
 class Review(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     user_id = models.ForeignKey(
-        User, verbose_name="User", on_delete=models.CASCADE)
+        User, verbose_name="User", on_delete=models.CASCADE, editable=False)
     review = models.PositiveIntegerField(validators=[
         MinValueValidator(1),
         MaxValueValidator(5)
-    ], default=1, null=False)
-    comment = models.TextField(max_length=255, blank=True)
+    ], default=1, null=False, editable=False)
+    comment = models.TextField(max_length=255, blank=True, editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
-# class Order(models.Model):
+    def __str__(self,):
+        return str(self.review) + " " + str(self.comment)
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    readonly_fields = ('user_id', 'review', 'comment', 'timestamp')
+
+
+# class OrderSummary(models.Model):
 #     class Meta:
 #         pass
-#     quantity = models.PositiveIntegerField(validators=[
-#         MinValueValidator(1),
-#         MaxValueValidator(5)
-#     ], null=False, default=1)
+#     order_id = models.CharField(
+#         verbose_name='Order ID', null=False, default="000000000000", editable=False, max_length=12, primary_key=True, unique=True)
+#     total_amount = models.DecimalField(
+#         decimal_places=2, max_digits=6, default=00000.00, null=False)
+
+#     def set_order_id(self,):
+#         self.order_id = create_new_ref_number(12)
+#         return self.order_id
+
+#     def set_order_total_amount(self, amount)
+#         self.total_amount += _
+
+#     def save(self,):
+#         super().save()
+
+
+# class OrderSummaryAdmin(admin.ModelAdmin):
+#     readonly_fields = ('order_id', )
+
+class Order(models.Model):
+    class Meta:
+        pass
+    id = models.AutoField(primary_key=True, unique=True)
+    order_id = models.CharField(verbose_name='Order ID', null=False,
+                                default="000000000000", editable=False, max_length=12)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(validators=[
+        MinValueValidator(1),
+        MaxValueValidator(5)
+    ], null=False, default=1)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    date_of_delivery = models.DateField(verbose_name="Deliver by")
+    worked_on_by = models.ManyToManyField('Employee', through='AssignedWork')
+    total_amount = models.DecimalField(
+        verbose_name="Total amount (Rs)",
+        decimal_places=2, max_digits=7, default=0000.00, null=False, editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return "ORDER # " + str(self.order_id) + " - " + str(self.user.email)
+
+    def save(self, ):
+        if self.order_id == "000000000000":
+            self.order_id = create_new_ref_number(12)
+        self.total_amount = self.item.estimated_price * self.quantity
+        reminder = Reminder(order=self, due_date=self.date_of_delivery)
+        # @TODO: Fix error when no account record exists
+        account = Account.objects.first()
+        account.balance += self.total_amount
+        try:
+            super().save()
+            account.save()
+            reminder.save()
+        except IntegrityError:
+            self.save()
+
+
+class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ('order_id', 'total_amount', 'timestamp', )
+
+
+class Employee(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    salary = models.DecimalField(
+        max_digits=7, decimal_places=2, null=False, default=00000.00)
+    works_on = models.ManyToManyField(
+        'Order', through='AssignedWork')
+
+    def __str__(self,):
+        return "Emp - " + str(self.user.name)
+
+    def save(self, ):
+        self.user.is_staff = True
+        super().save()
+
+
+class AssignedWork(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self,):
+        return str(self.employee) + " - " + str(self.order)
+
+
+class Reminder(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    due_date = models.DateField()
+
+    def __str__(self,):
+        return str(self.order) + " - " + str(self.due_date)
+
+
+class Account(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    balance = models.DecimalField(
+        max_digits=10, decimal_places=2, default=00000000.00)
+    last_updated_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self,):
+        return "Rs " + str(self.balance) + " /- @ " + str(self.last_updated_on)
