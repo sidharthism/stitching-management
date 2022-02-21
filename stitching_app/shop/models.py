@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from django.core.validators import RegexValidator, MaxValueValidator, MinValueValidator
 from django.contrib import admin
+import datetime
 from shop.utils import create_new_ref_number
 
 # Create your models here.
@@ -190,27 +191,32 @@ class Order(models.Model):
         MaxValueValidator(5)
     ], null=False, default=1)
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
-    date_of_delivery = models.DateField(verbose_name="Deliver by")
+    date_of_delivery = models.DateField(verbose_name="Deliver by", validators=[
+        MinValueValidator(datetime.datetime.now().date()),
+    ])
     worked_on_by = models.ManyToManyField('Employee', through='AssignedWork')
     total_amount = models.DecimalField(
         verbose_name="Total amount (Rs)",
         decimal_places=2, max_digits=7, default=0000.00, null=False, editable=False)
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
-    def __str__(self):
+    def __str__(self, ):
         return "ORDER # " + str(self.order_id) + " - " + str(self.user.email)
 
     def save(self, ):
+        self.total_amount = self.item.estimated_price * self.quantity
         if self.order_id == "000000000000":
             self.order_id = create_new_ref_number(12)
-        self.total_amount = self.item.estimated_price * self.quantity
-        reminder = Reminder(order=self, due_date=self.date_of_delivery)
-        # @TODO: Fix error when no account record exists
-        account = Account.objects.first()
-        account.balance += self.total_amount
+            reminder = Reminder(order=self, due_date=self.date_of_delivery)
+            # @TODO: Fix error when no account record exists
+            account = Account.objects.first()
+            account.balance += self.total_amount
+            account.save()
+        else:
+            reminder = Reminder.objects.get(order=self)
+            reminder.due_date = self.date_of_delivery
         try:
             super().save()
-            account.save()
             reminder.save()
         except IntegrityError:
             self.save()
