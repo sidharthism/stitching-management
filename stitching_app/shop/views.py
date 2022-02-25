@@ -59,6 +59,11 @@ def home(request):
     return render(request, "shop/index.html", ctx)
 
 
+class OrderView(View, ):
+    def get(self, request, *args, **kwargs):
+        return render(request, "shop/order.html", {})
+
+
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(request, "shop/dashboard.html", {})
